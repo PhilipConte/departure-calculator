@@ -1,26 +1,26 @@
-import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 
-function App() {
+import TripForm from './TripForm';
+import { usePersistedState } from './requests'
+import Trip from './Trip';
+
+export default function App() {
+  const [trips, setTrips] = usePersistedState('trips', []);
+
+
+  function addTrip(trip) {
+    setTrips([...trips, trip])
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div>
+        <p>Your Trips</p>
+        <ul>
+          {trips.map(t => <Trip key={t.id} t={t}/>)}
+        </ul>
+      </div>
+      <TripForm addTrip={addTrip} />
     </div>
   );
 }
-
-export default App;
