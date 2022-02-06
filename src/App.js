@@ -18,6 +18,7 @@ export default function App() {
         <p>Your Trips</p>
         <ul>
           {trips.map(t => <Trip key={t.id} t={t}/>)}
+          <button onClick={()=>setTrips([])}>Clear Trips</button>
         </ul>
       </div>
       <TripForm addTrip={addTrip} />
