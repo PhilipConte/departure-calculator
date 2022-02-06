@@ -13,4 +13,5 @@ This is in no way affiliated, sponsored, or endorsed by WMATA.
 nix develop nixpkgs#nodejs
 npm i
 npm start
+# npm run deploy
 ```
