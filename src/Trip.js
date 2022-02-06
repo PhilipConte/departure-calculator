@@ -15,7 +15,6 @@ export default function Trip(props) {
 
 // https://developer.wmata.com/docs/services/547636a6f9182302184cda78/operations/547636a6f918230da855363f
 async function StartCalculation(trip, setCalculating) {
-  setCalculating(true);
   const result = await Notification.requestPermission();
   if (result !== 'granted') {
     alert("You must grant this page notification permissions");
@@ -33,11 +32,11 @@ async function StartCalculation(trip, setCalculating) {
     return;
   };
 
-  console.log(`sending notification in ${time} minutes`)
+  alert(`sending notification in ${time} minutes`);
+  setCalculating(true);
   await delay(1000 * 60 * time);
-
-  showNotification("Go Go Go!");
   setCalculating(false);
+  showNotification("Go Go Go!");
 }
 
 async function showNotification(msg) {
