@@ -1,34 +1,57 @@
 import './App.css';
 
 import { wmataRequest } from './requests'
+import { useState } from 'react';
 
 export default function Trip(props) {
+  const [calculating, setCalculating] = useState(false)
   return (
     <div>
       {props.t.origin.Name} to {props.t.towards.Name} {props.t.mfs}
-      <button onClick={() => StartEstimation(props.t)}>Estimate</button>
+      {calculating ? undefined : <button onClick={() => StartCalculation(props.t, setCalculating)}>Calculate</button>}
     </div>
   );
 }
 
 // https://developer.wmata.com/docs/services/547636a6f9182302184cda78/operations/547636a6f918230da855363f
-async function StartEstimation(trip) {
+async function StartCalculation(trip, setCalculating) {
+  setCalculating(true);
+  const result = await Notification.requestPermission();
+  if (result !== 'granted') {
+    alert("You must grant this page notification permissions");
+    return;
+  }
+
   const resp = await wmataRequest(`https://api.wmata.com/StationPrediction.svc/json/GetPrediction/${trip.origin.Code}`)
-  const times = resp.Trains.filter(tn => tn.DestinationCode === trip.towards.Code)
-    .map(tn => parseInt(tn.Min, 10) - trip.mfs);
-  showNotification(times.join(" "))
+  const time = resp.Trains
+    .filter(tn => tn.DestinationCode === trip.towards.Code)
+    .map(tn => parseInt(tn.Min, 10) - trip.mfs)
+    .find(i => i >= 0);
+
+  if (time === undefined) {
+    alert("No train found");
+    return;
+  };
+
+  console.log(`sending notification in ${time} minutes`)
+  await delay(1000 * 60 * time);
+
+  showNotification("Go Go Go!");
+  setCalculating(false);
 }
 
-function showNotification(msg) {
-  Notification.requestPermission(function(result) {
-    if (result === 'granted') {
-      navigator.serviceWorker.ready.then(function(registration) {
-        registration.showNotification('Departure Calculator', {
-          body: msg,
-          timestamp: Date.now(),
-          vibrate: [200, 100, 200, 100, 200, 100, 200],
-        });
-      });
-    }
+async function showNotification(msg) {
+  navigator.serviceWorker.ready.then(function (registration) {
+    registration.showNotification('Departure Calculator', {
+      body: msg,
+      timestamp: Date.now(),
+      vibrate: [200, 100, 200, 100, 200, 100, 200],
+    });
+  });
+}
+
+function delay(milliseconds) {
+  return new Promise(resolve => {
+    setTimeout(resolve, milliseconds);
   });
 }
