@@ -1,0 +1,14 @@
+{
+  "files": {
+    "main.css": "/departure-calculator/static/css/main.8ac0f210.css",
+    "main.js": "/departure-calculator/static/js/main.3a712759.js",
+    "service-worker.js": "/departure-calculator/service-worker.js",
+    "index.html": "/departure-calculator/index.html",
+    "main.8ac0f210.css.map": "/departure-calculator/static/css/main.8ac0f210.css.map",
+    "main.3a712759.js.map": "/departure-calculator/static/js/main.3a712759.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.8ac0f210.css",
+    "static/js/main.3a712759.js"
+  ]
+}
