@@ -1,5 +1,5 @@
 /* eslint eqeqeq: 0 */
-export default function MySelect(props) {
+export default function TripFormSelect(props) {
   return (
     <select onChange={({target}) => doOnChange(target, props)} defaultValue="placeholder">
       <option value="placeholder" disabled>{props.placeholder}</option>

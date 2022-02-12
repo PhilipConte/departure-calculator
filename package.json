@@ -1,6 +1,6 @@
 {
   "name": "departure-calculator",
-  "homepage": "https://PhilipConte.github.io/departure-calculator/",
+  "homepage": ".",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -26,8 +26,11 @@
     "start": "react-scripts start",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
+    "prebuild": "cat src/sw-prod.js public/sw-common.js > src/service-worker.js",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "preserve": "npm run build",
+    "serve": "serve -s build",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -49,6 +52,7 @@
     ]
   },
   "devDependencies": {
-    "gh-pages": "^3.2.3"
+    "gh-pages": "^3.2.3",
+    "serve": "^13.0.2"
   }
 }

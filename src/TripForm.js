@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react';
-import { wmataRequest, usePersistedAPICall } from './requests';
+import { useState } from 'react';
+import { wmataRequest } from './requests';
+import { usePersistedAPICall } from './hooks'
 // import './App.css';
 
-import MySelect from './MySelect';
+import TripFormSelect from './TripFormSelect';
 
 export default function TripForm(props) {
   const lines = usePersistedAPICall('lines', [], requestLines);
@@ -12,36 +13,31 @@ export default function TripForm(props) {
   const [towardsStation, setTowardsStation] = useState(undefined);
   const [minutesFromStation, setMinutesFromStation] = useState(undefined)
 
-
-  useEffect(() => {
-    console.log("form state", line, originStation, towardsStation, minutesFromStation)
-  }, [line, originStation, towardsStation, minutesFromStation]);
-
   return (
     <div className="TripForm">
       <p>Add a Trip</p>
-      <MySelect
+      <TripFormSelect
         placeholder="Line"
         options={Object.values(lines)}
         valueK="LineCode"
         displayK="DisplayName"
         doOnChange={setLine}
       />
-      <MySelect
+      <TripFormSelect
         placeholder="Origin Station"
         options={filterStations(stations, line)}
         valueK="Code"
         displayK="Name"
         doOnChange={setOriginStation}
       />
-      <MySelect
+      <TripFormSelect
         placeholder="Towards Station"
         options={getPossibleDestinations(stations, line)}
         valueK="Code"
         displayK="Name"
         doOnChange={setTowardsStation}
       />
-      <MySelect
+      <TripFormSelect
         placeholder="Minutes From Station"
         options={[...Array(30).keys()].map(i => ({ v: i }))}
         valueK="v"

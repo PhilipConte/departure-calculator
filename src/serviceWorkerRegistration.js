@@ -11,7 +11,7 @@
 // opt-in, read https://cra.link/PWA
 
 export function register(config) {
-  if (process.env.NODE_ENV === 'production' && 'serviceWorker' in navigator) {
+  if ('serviceWorker' in navigator) {
     // The URL constructor is available in all browsers that support SW.
     const publicUrl = new URL(process.env.PUBLIC_URL, window.location.href);
     if (publicUrl.origin !== window.location.origin) {
@@ -23,15 +23,22 @@ export function register(config) {
     }
 
     window.addEventListener('load', () => {
-      registerValidSW(`${process.env.PUBLIC_URL}/service-worker.js`, config);
+      registerValidSW((process.env.NODE_ENV === 'production' ?
+        `${process.env.PUBLIC_URL}/service-worker.js`
+        : '/sw-common.js'
+      ), config);
     });
   }
 }
+
+export var reg = undefined
 
 function registerValidSW(swUrl, config) {
   navigator.serviceWorker
     .register(swUrl)
     .then((registration) => {
+      console.log("sw registered");
+      reg = registration;
       registration.onupdatefound = () => {
         const installingWorker = registration.installing;
         if (installingWorker == null) {
@@ -45,7 +52,7 @@ function registerValidSW(swUrl, config) {
               // content until all client tabs are closed.
               console.log(
                 'New content is available and will be used when all ' +
-                  'tabs for this page are closed. See https://cra.link/PWA.'
+                'tabs for this page are closed. See https://cra.link/PWA.'
               );
 
               // Execute callback

@@ -1,14 +1,14 @@
 import './App.css';
 
 import { wmataRequest } from './requests'
-import { useState } from 'react';
+import { reg } from './serviceWorkerRegistration';
 
 export default function Trip(props) {
-  const [calculating, setCalculating] = useState(false)
+  const {calculating, setCalculating, t} = props;
   return (
     <div>
-      {props.t.origin.Name} to {props.t.towards.Name} {props.t.mfs}
-      {calculating ? undefined : <button onClick={() => StartCalculation(props.t, setCalculating)}>Calculate</button>}
+      {t.origin.Name} to {t.towards.Name} {t.mfs}
+      {calculating ? undefined : <button onClick={() => StartCalculation(t, setCalculating)}>Calculate</button>}
     </div>
   );
 }
@@ -21,36 +21,26 @@ async function StartCalculation(trip, setCalculating) {
     return;
   }
 
+  // const times = ["1", "2", "3"];
   const resp = await wmataRequest(`https://api.wmata.com/StationPrediction.svc/json/GetPrediction/${trip.origin.Code}`)
-  const time = resp.Trains
+  const times = resp.Trains
     .filter(tn => tn.DestinationCode === trip.towards.Code)
-    .map(tn => parseInt(tn.Min, 10) - trip.mfs)
-    .find(i => i >= 0);
+    .map (tn => tn.Min)
+  const time = times.map(i => parseInt(i, 10) - trip.mfs).find(i => i >= 0);
 
   if (time === undefined) {
     alert("No train found");
     return;
   };
 
-  alert(`sending notification in ${time} minutes`);
+  const msgPromt = `Upcoming Departures: ${times.join(', ')}\n` +
+    `send notification in ${time} minute${time === 1 ? '': 's'}?`
+  if (!window.confirm(msgPromt)) return;
+
   setCalculating(true);
-  await delay(1000 * 60 * time);
-  setCalculating(false);
-  showNotification("Go Go Go!");
-}
-
-async function showNotification(msg) {
-  navigator.serviceWorker.ready.then(function (registration) {
-    registration.showNotification('Departure Calculator', {
-      body: msg,
-      timestamp: Date.now(),
-      vibrate: [200, 100, 200, 100, 200, 100, 200],
-    });
-  });
-}
-
-function delay(milliseconds) {
-  return new Promise(resolve => {
-    setTimeout(resolve, milliseconds);
+  reg.active.postMessage({
+    type: 'SCHEDULE_NOTIFICATION',
+    trip: trip,
+    time: time,
   });
 }

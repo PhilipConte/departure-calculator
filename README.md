@@ -13,5 +13,6 @@ This is in no way affiliated, sponsored, or endorsed by WMATA.
 nix develop nixpkgs#nodejs
 npm i
 npm start
-# npm run deploy
+# to deploy to GH pages: npm run deploy
+# to test a production build: npm run serve
 ```
