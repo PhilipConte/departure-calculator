@@ -1,13 +1,20 @@
-import './App.css';
-
 import { wmataRequest } from './requests'
 import { reg } from './serviceWorkerRegistration';
 
 export default function Trip(props) {
   const {calculating, setCalculating, t} = props;
   return (
-    <div>
-      {t.origin.Name} to {t.towards.Name} {t.mfs}
+    <div className='trip box'>
+      <div className="toFrom">
+        <div>
+          <p>from:</p>
+          <p>{t.origin.Name} ({t.mfs})</p>
+        </div>
+        <div>
+          <p>to: </p>
+          <p>{t.towards.Name}</p>
+        </div>
+      </div>
       {calculating ? undefined : <button onClick={() => StartCalculation(t, setCalculating)}>Calculate</button>}
     </div>
   );

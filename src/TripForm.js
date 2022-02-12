@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { wmataRequest } from './requests';
 import { usePersistedAPICall } from './hooks'
-// import './App.css';
 
 import TripFormSelect from './TripFormSelect';
 
@@ -14,36 +13,39 @@ export default function TripForm(props) {
   const [minutesFromStation, setMinutesFromStation] = useState(undefined)
 
   return (
-    <div className="TripForm">
+    <div className="tripForm">
       <p>Add a Trip</p>
-      <TripFormSelect
-        placeholder="Line"
-        options={Object.values(lines)}
-        valueK="LineCode"
-        displayK="DisplayName"
-        doOnChange={setLine}
-      />
-      <TripFormSelect
-        placeholder="Origin Station"
-        options={filterStations(stations, line)}
-        valueK="Code"
-        displayK="Name"
-        doOnChange={setOriginStation}
-      />
-      <TripFormSelect
-        placeholder="Towards Station"
-        options={getPossibleDestinations(stations, line)}
-        valueK="Code"
-        displayK="Name"
-        doOnChange={setTowardsStation}
-      />
-      <TripFormSelect
-        placeholder="Minutes From Station"
-        options={[...Array(30).keys()].map(i => ({ v: i }))}
-        valueK="v"
-        displayK="v"
-        doOnChange={setMinutesFromStation}
-      />
+      <div>
+        <TripFormSelect
+          placeholder="Line"
+          options={Object.values(lines)}
+          valueK="LineCode"
+          displayK="DisplayName"
+          doOnChange={setLine}
+        />
+        <TripFormSelect
+          placeholder="Origin Station"
+          options={filterStations(stations, line)}
+          valueK="Code"
+          displayK="Name"
+          doOnChange={setOriginStation}
+        />
+        <TripFormSelect
+          placeholder="Towards Station"
+          options={getPossibleDestinations(stations, line)}
+          valueK="Code"
+          displayK="Name"
+          doOnChange={setTowardsStation}
+        />
+        <TripFormSelect
+          placeholder="Minutes From Station"
+          options={[...Array(30).keys()].map(i => ({ v: i }))}
+          valueK="v"
+          displayK="v"
+          doOnChange={setMinutesFromStation}
+        />
+      </div>
+      <br/>
       <button onClick={() => trySubmit(props.addTrip, line, originStation, towardsStation, minutesFromStation)}>Add Trip</button>
     </div>
   );

@@ -17,14 +17,12 @@ export default function Trips(props) {
   return (
     <div>
       <p>Your Trips</p>
-      <ul>
-        {props.trips.map(t => <Trip
-          key={t.id}
-          t={t}
-          calculating={calculating}
-          setCalculating={setCalculating}
-        />)}
-      </ul>
+      {props.trips.map(t => <Trip
+        key={t.id}
+        t={t}
+        calculating={calculating}
+        setCalculating={setCalculating}
+      />)}
     </div>
   );
 }

@@ -1,5 +1,3 @@
-import './App.css';
-
 import { usePersistedState } from './hooks'
 
 import Debug from './Debug';
@@ -13,6 +11,7 @@ export default function App() {
     <div className="App">
       <Trips trips={trips} />
       <TripForm addTrip={trip => setTrips([...trips, trip])} />
+      <br/>
       <Debug/>
     </div>
   );

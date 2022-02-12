@@ -24,5 +24,5 @@ async function testNotifications() {
 
 async function clearData() {
   await Promise.all(['lines', 'stations', 'trips'].map(k => set(k, undefined)));
-  window.location.reload();
+  window.location.reload(true);
 }
